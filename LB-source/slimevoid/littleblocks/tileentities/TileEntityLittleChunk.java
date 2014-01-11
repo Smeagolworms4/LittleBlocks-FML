@@ -692,56 +692,50 @@ public class TileEntityLittleChunk extends TileEntity implements ILittleBlocks {
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		super.readFromNBT(nbttagcompound);
 		
-		try {
-			
-			NBTTagList list = nbttagcompound.getTagList("Content");
-			for (int x = 0; x < this.content.length; x++) {
-				for (int y = 0; y < this.content[x].length; y++) {
-					for (int z = 0; z < this.content[x][y].length; z++) {
-						this.content[x][y][z] = ((NBTTagInt) list.tagAt((x << 6)
+		NBTTagList list = nbttagcompound.getTagList("Content");
+		for (int x = 0; x < this.content.length; x++) {
+			for (int y = 0; y < this.content[x].length; y++) {
+				for (int z = 0; z < this.content[x][y].length; z++) {
+					this.content[x][y][z] = ((NBTTagInt) list.tagAt((x << 6)
+																	+ (y << 3)
+																	+ z)).data;
+				}
+			}
+		}
+		NBTTagList list2 = nbttagcompound.getTagList("Metadatas");
+		for (int x = 0; x < this.metadatas.length; x++) {
+			for (int y = 0; y < this.metadatas[x].length; y++) {
+				for (int z = 0; z < this.metadatas[x][y].length; z++) {
+					this.metadatas[x][y][z] = ((NBTTagInt) list2.tagAt((x << 6)
 																		+ (y << 3)
 																		+ z)).data;
-					}
 				}
 			}
-			NBTTagList list2 = nbttagcompound.getTagList("Metadatas");
-			for (int x = 0; x < this.metadatas.length; x++) {
-				for (int y = 0; y < this.metadatas[x].length; y++) {
-					for (int z = 0; z < this.metadatas[x][y].length; z++) {
-						this.metadatas[x][y][z] = ((NBTTagInt) list2.tagAt((x << 6)
-																			+ (y << 3)
-																			+ z)).data;
-					}
+		}
+
+		// this.chunkTileEntityMap.clear();
+		// this.tiles.clear();
+		NBTTagList tilesTag = nbttagcompound.getTagList("Tiles");
+		if (tilesTag != null) {
+			for (int i = 0; i < tilesTag.tagCount(); i++) {
+				NBTTagCompound tileCompound = (NBTTagCompound) tilesTag.tagAt(i);
+				TileEntity tile = TileEntity.createAndLoadEntity(tileCompound);
+
+				if (tile != null) {
+					this.addTileEntity(tile);
 				}
 			}
-	
-			// this.chunkTileEntityMap.clear();
-			// this.tiles.clear();
-			NBTTagList tilesTag = nbttagcompound.getTagList("Tiles");
-			if (tilesTag != null) {
-				for (int i = 0; i < tilesTag.tagCount(); i++) {
-					NBTTagCompound tileCompound = (NBTTagCompound) tilesTag.tagAt(i);
-					TileEntity tile = TileEntity.createAndLoadEntity(tileCompound);
-	
-					if (tile != null) {
-						this.addTileEntity(tile);
-					}
+		}
+
+		if (nbttagcompound.hasKey("TileTicks")) {
+			NBTTagList tickList = nbttagcompound.getTagList("TileTicks");
+
+			if (tickList != null) {
+				for (int i = 0; i < tickList.tagCount(); i++) {
+					NBTTagCompound pendingTick = (NBTTagCompound) tickList.tagAt(i);
+					this.pendingBlockUpdates.add(pendingTick);
 				}
 			}
-	
-			if (nbttagcompound.hasKey("TileTicks")) {
-				NBTTagList tickList = nbttagcompound.getTagList("TileTicks");
-	
-				if (tickList != null) {
-					for (int i = 0; i < tickList.tagCount(); i++) {
-						NBTTagCompound pendingTick = (NBTTagCompound) tickList.tagAt(i);
-						this.pendingBlockUpdates.add(pendingTick);
-					}
-				}
-			}
-		} catch (Exception e) {
-			System.out.println ("Bad littleblock : "+e);
-			System.out.println ("Bad littleblock : "+e);
 		}
 	}
 
