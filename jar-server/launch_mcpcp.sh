@@ -11,7 +11,8 @@ if [ "$2" = "" ]; then
 	pwd
 
 	cd reobf/minecraft/
-	zip LTB.jar *
+	zip -r LTB.jar *
+	rm -rf ../../jar-server/mods/LTB.jar 2> /dev/null
 	mv LTB.jar ../../jar-server/mods/LTB.jar
 	pwd
 
