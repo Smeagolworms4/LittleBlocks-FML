@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 cd $1
 
@@ -19,5 +19,5 @@ if [ "$2" = "" ]; then
 	cd ../../jar-server
 	pwd
 fi;
-java -jar mcpc-plus-1.6.4-R2.1-forge965-B224.jar
+terminator -e "java -jar mcpc-plus-1.6.4-R2.1-forge965-B224.jar; READ PAUSE -p \"PAUSE\""
 
