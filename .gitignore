@@ -1,3 +1,15 @@
 /bin
 /jars
 /lib
+jar-server/ForgeModLoader*
+jar-server/banned*
+jar-server/bukkit*
+jar-server/config*
+jar-server/help*
+jar-server/libraries*
+jar-server/ops*
+jar-server/mcpc*
+jar-server/plugins*
+jar-server/server*
+jar-server/spigot*
+jar-server/white-list*
